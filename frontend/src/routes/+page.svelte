@@ -14,8 +14,12 @@
                 clearChat
             })
     })
-    console.log(clearChat)
+    clearChat = false
     messages= await res.json()
+    }
+    async function doClearChat () {
+        messages = []
+        clearChat = !clearChat
     }
 </script>
 
@@ -29,4 +33,4 @@
 </pre>
 <input bind:value={question} />
 <button type="button" on:click={doChat}> Post it. </button>
-<button type="button" on:click={() => { clearChat = !clearChat }}> Clear Chat</button>
+<button type="button" on:click={doClearChat}> Clear Chat</button>
