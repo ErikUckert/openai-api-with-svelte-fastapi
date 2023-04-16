@@ -1,32 +1,9 @@
 <script>
-	let foo = 5
-	let bar = 'query'
 	let result = null
-    let answer = null
-
-    let name = "Erik"
-    let description = "is great"
-    let price = 0
-    let tax =  0
-
+    let messages = []
     let question = ""
+    let clearChat = false
 	
-	async function doPost () {
-
-		const res = await fetch('http://localhost:8000/items', {
-			method: 'POST',
-            headers: {"Content-Type": "application/json"},
-			body: JSON.stringify({
-				name,
-				description,
-                price,
-                tax
-			})
-		})
-		console.log(res)
-		const json = await res.json()
-		result = JSON.stringify(json)
-	}
 	async function doChat () {
 
         const res = await fetch('http://localhost:8000/chat', {
@@ -34,29 +11,22 @@
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 question,
+                clearChat
             })
     })
-    console.log(res)
-    const json = await res.json()
-    answer = JSON.stringify(json)
+    console.log(clearChat)
+    messages= await res.json()
     }
 </script>
 
-<input bind:value={name} />
-<input bind:value={description} />
-<input bind:value={price} />
-<input bind:value={tax} />
-
-<button type="button" on:click={doPost}> Post it. </button>
-<p>Result:</p>
+<p>Chat:</p>
 <pre>
-{result}
+    {#each messages as message}
+        {#if message.role != "system"}
+        <p>{message.role + ": " + message.content}</p>
+        {/if}
+    {/each}
 </pre>
-
 <input bind:value={question} />
-
 <button type="button" on:click={doChat}> Post it. </button>
-<p>Result:</p>
-<pre>
-{answer}
-</pre>
+<button type="button" on:click={() => { clearChat = !clearChat }}> Clear Chat</button>
