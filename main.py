@@ -36,11 +36,12 @@ async def create_chat(chat: Chat):
         print(chat.clearChat)
         global messages 
         messages = initMessages()
-    messages.append({"role": "user", "content": chat.question})
-    res = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages = messages
-        )
-    messages.append({"role": "assistant", "content": res.choices[0].message.content})
+    if chat.question: 
+        messages.append({"role": "user", "content": chat.question})
+        res = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages = messages
+            )
+        messages.append({"role": "assistant", "content": res.choices[0].message.content})
     print(messages)
     return messages
